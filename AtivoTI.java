@@ -1,13 +1,16 @@
-// package techlab inventory;
+//Classe que representa um ativo de tecnologia da informação
+package Techlab;
 
-public class AtivoTI {
-    private String id;
+//Aula 02
+/*public class AtivoTI {
+    // Atributos privados (Encapsulamento)
+    private int id;
     private String codigoPatrimonio;
     private String modelo;
     private String status;
-    
-    //Construtor
-    public AtivoTI(String id, String codigoPatrimonio, String modelo, String status){
+
+    // Construtor
+    public AtivoTI(int id, String codigoPatrimonio, String modelo, String status) {
         this.id = id;
         this.codigoPatrimonio = codigoPatrimonio;
         this.modelo = modelo;
@@ -15,19 +18,19 @@ public class AtivoTI {
     }
 
     // Getters e Setters
-    public String getID(){
+    public int getId() {
         return id;
     }
 
-    public void setID(String id){ // função void é quando não espera nada
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getCodigoPatrimonio(){
+    public String getCodigoPatrimonio() {
         return codigoPatrimonio;
     }
 
-    public void setCodigoPatrimonio(String codigoPatrimonio){
+    public void setCodigoPatrimonio(String codigoPatrimonio) {
         this.codigoPatrimonio = codigoPatrimonio;
     }
 
@@ -46,4 +49,98 @@ public class AtivoTI {
     public void setStatus(String status) {
         this.status = status;
     }
+}*/
+
+//Aul04
+/*public class AtivoTI{
+    private int id;
+    private String patrimonio;
+    private String modelo;
+    private String status;
+
+    //Construtor Completo
+    public AtivoTI(int id, String patrimonio, String modelo, String status){
+        this.id = id;
+        this.patrimonio = patrimonio;
+        this.modelo = modelo;
+        this.status = status;
+    }
+
+    //Construtor Sobrecarregado
+    //Se o status não for informado, assume "Ativo" por padrão
+    public AtivoTI(int id, String patrimonio, String modelo){
+        this(id, patrimonio, modelo, "Ativo");
+    }
+
+    //Getters e Stters
+    public String getStatus() {return this.status;}
+    public void setStatus(String status) {this.status = status;}
+    public String getModelo(){return this.modelo;}
+
+    //Representação textual do obejto AtivoTI
+    @Override
+    public String toString(){
+        return "Ativo TI [ID: "+this.id+" | Pat: "+this.patrimonio+
+                " | Modelo: "+this.modelo+" | Sattus: "+this.status+"]";
+    }
+}*/
+
+//Aula 05
+/*public class AtivoTI{
+    //Atributos
+
+
+    //Construtor
+    public AtivoTI(int id, String patrimonio, String modelo, String status){
+        this.id = id;
+        this.patrimonio = patrimonio;
+        this.modelo = modelo;
+        this.status = status;
+    }
+
+    //Getters e Setters
+    public int getId() {return id;}
+    public String getPatrimonio(){return patrimonio;}
+    public String getModelo(){return modelo;}
+    public String getStatus(){return status;}
+    public void setPatrimonio(String patrimonio){this.patrimonio = patrimonio;}
+    public void setModelo(String modelo){this.modelo = modelo;}
+    public void setStatus(String status){this.status = status;}
+
+    //Representação 
+    
+}*/
+// Aula 6 Classe Abstrata
+public abstract class AtivoTI{
+
+    //Atributos
+    private int id;
+    private String patrimonio;
+    private String modelo;
+    private String status;
+    
+    //construtor
+    public AtivoTI(int id, String patrimonio, String modelo, String status ){
+
+        this.id = id;
+        this.patrimonio = patrimonio;
+        this.modelo = modelo;
+        this.status = status;
+    }
+
+    getters e setters 
+    public int getId (){return id;}
+    public String getPatrimonio(){return patrimonio;}
+    public String getModelo(){return modelo;}
+    public String getStatus(){return status;}
+
+    public void setPatrimonio(String patrimonio){this.patrimonio = patrimonio;}
+    public void setModelo(String modelo){this.modelo = modelo;}
+    public void setStatus(String status){this.status = status;}
+
+    // nova metodo Abstrato
+
+    public abstract double calcularCustoManutencaoMensal();
+
+
 }
