@@ -1,5 +1,5 @@
 // Classe principal para testar a funcionalidade da classe AtivoTI
-package Techlab;
+//package Techlab;
 //import java.util.Scanner;
 
 //Aula 02
@@ -134,6 +134,9 @@ package Techlab;
 public class Main {
 
     public static void main(String[] args) {
+
+        // Aula 8 - Inicialização de banco de dados SQLite
+        ConexaoBanco.inicializarBanco();
         System.out.println("==================================================");
         System.out.println(" TECHLAB INVENTORY - ABSTRAÇÃO E INTERFACES (AULA 6) ");
         System.out.println("==================================================\n");
@@ -150,6 +153,30 @@ public class Main {
         // 2. INSTANCIAÇÃO DE SUBCLASSES CONCRETAS 
         // ----------------------------------------------------------------- 
         System.out.println("[RAM] Instanciando objetos concretos especializados no Heap...");
+
+        // Consultar os equipamentos cadastrados no banco de dados
+        AtivoDAO ativoDAOConsulta = new AtivoDAO();
+
+        try {
+            System.out.println("\n=== EQUIPAMENTOS CADASTRADOS ===");
+
+            for (AtivoTI ativo : ativoDAOConsulta.listarTodos()) {
+                System.out.println("Patrimônio: " + ativo.getPatrimonio());
+                System.out.println("Modelo: " + ativo.getModelo());
+                System.out.println("Status: " + ativo.getStatus());
+
+                if (ativo instanceof Servidor servidor) {
+                    System.out.println("IP: " + servidor.getIpEstatico());
+                    System.out.println("Sistema Operacional: " + servidor.getSistemaOperacional());
+                    System.out.println("Memória RAM: " + servidor.getMemoriaRam() + " GB");
+                }
+
+                System.out.println("-----------------------------");
+            }
+
+        } catch (java.sql.SQLException erro) {
+            System.out.println("Erro ao consultar equipamentos: " + erro.getMessage());
+        }
 
         // Instanciamos objetos da subclasse concreta 'Servidor' 
         Servidor servidorWeb = new Servidor(
@@ -171,6 +198,23 @@ public class Main {
             "Windows Server 2022",
             64
         );
+
+        //------------------------------------------------------------------
+        // Aula 8 - nova classe inserida no Main "AtivoDAO"
+        //--------------------------------------------------------------------
+         //AtivoDAO ativoDAO = new AtivoDAO();
+
+       // try {
+
+           // ativoDAO.salvar(servidorWeb);
+           // ativoDAO.salvar(servidorBanco);
+
+        //} catch (java.sql.SQLException erro) {
+
+            //System.out.println("Falha ao cadastrar equipamento: "
+                   // + erro.getMessage());
+        //}
+
 
         // ----------------------------------------------------------------- 
         // 3. RELATÓRIO POLIMÓRFICO DE CUSTOS (Usando Classe Abstrata) 

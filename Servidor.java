@@ -1,4 +1,4 @@
-package Techlab;
+//package Techlab;
 
 public class Servidor extends AtivoTI{
     private String ipEstatico;
@@ -12,6 +12,22 @@ public class Servidor extends AtivoTI{
                 this.sistemaOperacional = sistemaOperacional;
                 this.memoriaRam = memoriaRam;
             }
+         
+         
+    // Getters dos atributos específicos do Servidor
+
+    public String getIpEstatico() {
+        return ipEstatico;
+    }
+
+    public String getSistemaOperacional() {
+        return sistemaOperacional;
+    }
+
+    public int getMemoriaRam() {
+        return memoriaRam;
+    }
+
     
     @Override
     public String toString(){

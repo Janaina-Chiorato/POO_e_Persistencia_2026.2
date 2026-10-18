@@ -1,5 +1,5 @@
 //Classe que representa um ativo de tecnologia da informação
-package Techlab;
+//package Techlab;
 
 //Aula 02
 /*public class AtivoTI {
@@ -128,7 +128,7 @@ public abstract class AtivoTI{
         this.status = status;
     }
 
-    getters e setters 
+    //getters e setters 
     public int getId (){return id;}
     public String getPatrimonio(){return patrimonio;}
     public String getModelo(){return modelo;}
