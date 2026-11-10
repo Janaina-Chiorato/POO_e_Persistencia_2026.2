@@ -90,20 +90,55 @@ public class AtivoDAO {
     }
 
     // DELETE - Excluir um ativo pelo ID
+   
+    // DELETE - Excluir um ativo pelo ID
+    // EXERCICIO 3 - Verificacao previa de integridade
     public boolean excluir(int id) throws SQLException {
 
-        String sql = "DELETE FROM ativos WHERE id = ?";
+        String sqlVerificacao = """
+            SELECT COUNT(*) AS total
+            FROM chamados
+            WHERE ativo_id = ?
+            """;
 
-        try (Connection conexao = ConexaoBanco.obterConexao();
-             PreparedStatement comando = conexao.prepareStatement(sql)) {
+        String sqlExclusao = "DELETE FROM ativos WHERE id = ?";
 
-            comando.setInt(1, id);
+        try (Connection conexao = ConexaoBanco.obterConexao()) {
 
-            int linhasAfetadas = comando.executeUpdate();
+            // 1. Verificar se existem chamados vinculados
+            try (PreparedStatement verificacao =
+                    conexao.prepareStatement(sqlVerificacao)) {
 
-            return linhasAfetadas > 0;
+                verificacao.setInt(1, id);
+
+                try (ResultSet resultado = verificacao.executeQuery()) {
+
+                    if (resultado.next()) {
+
+                        int total = resultado.getInt("total");
+
+                        if (total > 0) {
+                            throw new SQLException(
+                                "Operação Negada: O ativo selecionado possui chamados vinculados e não pode ser removido sem antes tratar os chamados associados."
+                            );
+                        }
+                    }
+                }
+            }
+
+            // 2. Excluir somente se nao houver chamados
+            try (PreparedStatement comando =
+                    conexao.prepareStatement(sqlExclusao)) {
+
+                comando.setInt(1, id);
+
+                int linhasAfetadas = comando.executeUpdate();
+
+                return linhasAfetadas > 0;
+            }
         }
     }
+
 
 
 }

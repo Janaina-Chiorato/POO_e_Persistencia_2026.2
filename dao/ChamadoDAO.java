@@ -82,4 +82,52 @@ public class ChamadoDAO {
         return chamados;
     }
 
+    // EXERCICIO 2 - Listar todos os chamados com seus ativos
+    public List<ChamadoSuporte> listarTodosComAtivo()
+            throws SQLException {
+
+        List<ChamadoSuporte> chamados = new ArrayList<>();
+
+        String sql = """
+            SELECT c.id AS chamado_id,
+                   c.descricao,
+                   c.status,
+                   a.id AS ativo_id,
+                   a.nome,
+                   a.patrimonio,
+                   a.valor
+            FROM chamados c
+            INNER JOIN ativos a ON c.ativo_id = a.id
+            """;
+
+        try (Connection conexao = ConexaoBanco.obterConexao();
+             PreparedStatement comando = conexao.prepareStatement(sql);
+             ResultSet resultado = comando.executeQuery()) {
+
+            while (resultado.next()) {
+
+                // Reconstruir o ativo com todos os seus dados
+                AtivoTI ativo = new AtivoTI(
+                    resultado.getInt("ativo_id"),
+                    resultado.getString("nome"),
+                    resultado.getString("patrimonio"),
+                    resultado.getDouble("valor")
+                );
+
+                // Reconstruir o chamado com o ativo completo
+                ChamadoSuporte chamado = new ChamadoSuporte(
+                    resultado.getInt("chamado_id"),
+                    resultado.getString("descricao"),
+                    resultado.getString("status"),
+                    ativo
+                );
+
+                chamados.add(chamado);
+            }
+        }
+
+        return chamados;
+    }
+
+
 }

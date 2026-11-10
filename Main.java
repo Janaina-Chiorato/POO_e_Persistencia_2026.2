@@ -1,271 +1,133 @@
-// Classe principal para testar a funcionalidade da classe AtivoTI
-//package Techlab;
-//import java.util.Scanner;
 
-//Aula 02
-/*public class Main {
-    public static void main(String[] args) {
-        // Criando a primeira instância de AtivoTI na memória RAM
-        AtivoTI servidor = new AtivoTI(1, "PAT-2026-001", "Dell PowerEdge R740", "Ativo");
 
-        // Exibindo atributos usando Getters
-        System.out.println("=== Ativo Cadastrado ===");
-        System.out.println("Patrimônio: " + servidor.getCodigoPatrimonio());
-        System.out.println("Modelo: " + servidor.getModelo());
-        System.out.println("Status Inicial: " + servidor.getStatus());
+import dao.AtivoDAO;
+import dao.ChamadoDAO;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
+import model.ChamadoSuporte;
 
-        // Alterando o estado do objeto usando Setter
-        servidor.setStatus("Em Manutenção");
-        System.out.println("Novo Status: " + servidor.getStatus());
-    }
-}*/
-
-//Aula 03
-/*public class Main{
-    public static void main(String[] args){
-        Scanner leitor = new Scanner(System.in);
-
-        System.out.println("=== Cadastro de AtivoTI ===");
-        System.out.print("Digite o ID do ativo: ");
-        int idAtivo = leitor.nextInt();
-        leitor.nextLine(); // Limpar o buffer
-        System.out.print("Digite o código de patrimônio: ");
-        String codigoPatrimonio = leitor.nextLine();
-        System.out.print("Informe o modelo do ativo: ");
-        String modelo = leitor.nextLine();
-        System.out.print("Informe o status do ativo: ");
-        String status = leitor.nextLine();
-
-        AtivoTI equipamento = new AtivoTI(idAtivo, codigoPatrimonio, modelo, status);
-
-        System.out.println("\n=== Ativo Cadastrado Chamado ===");
-        System.out.print("ID do Chamado de Suporte: ");
-        int idChamado = leitor.nextInt();
-        leitor.nextLine(); // Limpar o buffer
-        System.out.print("Descrição do Chamado: ");
-        String descricaoChamado = leitor.nextLine();
-        
-        ChamadoSuporte chamado = new ChamadoSuporte(idChamado, descricaoChamado, equipamento);
-
-        System.out.println("\n=== Status inicial do Equipamento ===");
-        System.out.println("Status do Equipamento: " + chamado.getAtivoRelacionado().getStatus());
-
-        System.out.print("Digite o novo status para o equipamento (ex: Em Manutencao): ");
-        String novoStatus = leitor.nextLine();
-
-        chamado.getAtivoRelacionado().setStatus(novoStatus);
-
-        System.out.println("\n=== Verificação de Integridade em RAM ===");
-        System.out.println("Status no objeto 'equipamento': " + equipamento.getStatus());
-        System.out.println("Status via objeto 'chamado': " + chamado.getAtivoRelacionado().getStatus());
-
-        leitor.close();
-    }
-}*/
-
-//Aula 04
-/*public class Main{
-    public static void main(String[] args){
-        Scanner leitor = new Scanner(System.in);
-
-        System.out.println("=== Cadastro de AtivoTI Simplificado ===");
-        System.out.print("Digite o ID do ativo: ");
-        int idAtivo = leitor.nextInt();
-        leitor.nextLine(); // Limpar o buffer
-        System.out.print("Digite o código de patrimônio: ");
-        String codigoPatrimonio = leitor.nextLine();
-        System.out.print("Informe o modelo do ativo: ");
-        String modelo = leitor.nextLine();
-
-        AtivoTI equipamento = new AtivoTI(idAtivo, codigoPatrimonio, modelo);
-
-        System.out.println("\n=== Ativo Cadastrado Chamado ===");
-        System.out.print("ID do Chamado de Suporte: ");
-        int idChamado = leitor.nextInt();
-        leitor.nextLine(); // Limpar o buffer
-        System.out.print("Descrição do Chamado: ");
-        String descricaoChamado = leitor.nextLine();
-        System.out.print("Prioridade (Alta/Media/Baixa): ");
-        String prioridade = leitor.nextLine();
-
-        ChamadoSuporte chamado = new ChamadoSuporte(idChamado, descricaoChamado, prioridade, equipamento);
-
-        System.out.println("\n=== Relatorio do Sistema ===");
-        System.out.println(chamado);
-
-        leitor.close();
-    }
-}*/
-
-//Aula 05
-/*public class Main {
-    public static void main(String[] args) {
-        System.out.println("==================================================");
-        System.out.println("   TECHLAB INVENTORY - TESTE DE HERANÇA (AULA 5)  ");
-        System.out.println("==================================================\n");
-
-        System.out.println("[RAM] Instanciando objetos especializados no Heap...");
-        
-        // 1. Instanciamos apenas objetos da subclasse Servidor (com dados diferentes) [cite: 64, 211]
-        Servidor servidorWeb = new Servidor(
-            1, 
-            "PAT-2026-001", 
-            "Dell PowerEdge R740", 
-            "Ativo", 
-            "192.168.1.100", 
-            "Ubuntu Server 22.04 LTS"
-        );
-
-        Servidor servidorBanco = new Servidor(
-            2, 
-            "PAT-2026-003", 
-            "HP ProLiant DL360", 
-            "Em Manutenção", 
-            "192.168.1.150", 
-            "Windows Server 2022"
-        );
-
-       System.out.println(servidorWeb);
-       System.out.println(servidorBanco);
-    } 
-}*/
-
-//Aula 6
 public class Main {
 
     public static void main(String[] args) {
 
-        // Aula 8 - Inicialização de banco de dados SQLite
-        ConexaoBanco.inicializarBanco();
-        System.out.println("==================================================");
-        System.out.println(" TECHLAB INVENTORY - ABSTRAÇÃO E INTERFACES (AULA 6) ");
-        System.out.println("==================================================\n");
+        Scanner entrada = new Scanner(System.in);
 
-        // ----------------------------------------------------------------- 
-        // 1. DEMONSTRAÇÃO DE ABSTRAÇÃO (Tentativa de Instanciação Direta) 
-        // ----------------------------------------------------------------- 
-        // A linha abaixo causará um ERRO DE COMPILAÇÃO se descomprometida: 
-        // AtivoTI ativoGenerico = new AtivoTI(0, "PAT-000", "Generico", "Ativo"); 
-        // Motivo: 'AtivoTI' é abstrata e não pode ser instanciada diretamente no Heap! 
-        System.out.println("[REGRA DE NEGÓCIO] 'AtivoTI' é uma classe abstrata e não pode usar 'new'.\n");
+        AtivoDAO ativoDAO = new AtivoDAO();
+        ChamadoDAO chamadoDAO = new ChamadoDAO();
 
-        // ----------------------------------------------------------------- 
-        // 2. INSTANCIAÇÃO DE SUBCLASSES CONCRETAS 
-        // ----------------------------------------------------------------- 
-        System.out.println("[RAM] Instanciando objetos concretos especializados no Heap...");
+        System.out.println("====================================");
+        System.out.println("   TECHLAB - SERVICE DESK AULA 09");
+        System.out.println("====================================");
 
-        // Consultar os equipamentos cadastrados no banco de dados
-        AtivoDAO ativoDAOConsulta = new AtivoDAO();
+        // ==========================================
+        // EXERCICIO 1 - VALIDACAO DE EXCLUSAO
+        // ==========================================
+
+        System.out.println("\n=== EXCLUSAO DE ATIVO ===");
+        System.out.print("Digite o ID do ativo que deseja excluir: ");
+
+        if (!entrada.hasNextInt()) {
+            System.out.println(
+                "Aviso: Informe um ID numerico valido."
+            );
+            entrada.close();
+            return;
+        }
+
+        int id = entrada.nextInt();
 
         try {
-            System.out.println("\n=== EQUIPAMENTOS CADASTRADOS ===");
 
-            for (AtivoTI ativo : ativoDAOConsulta.listarTodos()) {
-                System.out.println("Patrimônio: " + ativo.getPatrimonio());
-                System.out.println("Modelo: " + ativo.getModelo());
-                System.out.println("Status: " + ativo.getStatus());
+            boolean excluido = ativoDAO.excluir(id);
 
-                if (ativo instanceof Servidor servidor) {
-                    System.out.println("IP: " + servidor.getIpEstatico());
-                    System.out.println("Sistema Operacional: " + servidor.getSistemaOperacional());
-                    System.out.println("Memória RAM: " + servidor.getMemoriaRam() + " GB");
+            if (excluido) {
+                System.out.println(
+                    "Ativo excluido com sucesso."
+                );
+            } else {
+                System.out.println(
+                    "Aviso: Nenhum ativo foi localizado com o ID informado. Exclusão não efetuada."
+                );
+            }
+
+        } catch (SQLException erro) {
+            System.out.println(
+                "Erro ao excluir ativo: " + erro.getMessage()
+            );
+        }
+
+        // ==========================================
+        // EXERCICIO 2 - CONSULTA COMPLETA COM JOIN
+        // ==========================================
+
+        System.out.println("\n====================================");
+        System.out.println("  RELATORIO GERAL DE CHAMADOS");
+        System.out.println("====================================");
+
+        try {
+
+            List<ChamadoSuporte> chamados =
+                    chamadoDAO.listarTodosComAtivo();
+
+            if (chamados.isEmpty()) {
+
+                System.out.println(
+                    "Nenhum chamado cadastrado."
+                );
+
+            } else {
+
+                for (ChamadoSuporte chamado : chamados) {
+
+                    System.out.println(
+                        "\nChamado ID: " + chamado.getId()
+                    );
+
+                    System.out.println(
+                        "Descricao: " + chamado.getDescricao()
+                    );
+
+                    System.out.println(
+                        "Status: " + chamado.getStatus()
+                    );
+
+                    System.out.println(
+                        "Ativo ID: " + chamado.getAtivo().getId()
+                    );
+
+                    System.out.println(
+                        "Ativo: " + chamado.getAtivo().getNome()
+                    );
+
+                    System.out.println(
+                        "Patrimonio: " +
+                        chamado.getAtivo().getPatrimonio()
+                    );
+
+                    System.out.printf(
+                        "Valor: R$ %.2f%n",
+                        chamado.getAtivo().getValor()
+                    );
+
+                    System.out.println(
+                        "------------------------------------"
+                    );
                 }
-
-                System.out.println("-----------------------------");
             }
 
-        } catch (java.sql.SQLException erro) {
-            System.out.println("Erro ao consultar equipamentos: " + erro.getMessage());
+        } catch (SQLException erro) {
+
+            System.out.println(
+                "Erro ao consultar chamados: " +
+                erro.getMessage()
+            );
         }
 
-        // Instanciamos objetos da subclasse concreta 'Servidor' 
-        Servidor servidorWeb = new Servidor(
-            1, 
-            "PAT-2026-001", 
-            "Dell PowerEdge R740", 
-            "Ativo", 
-            "192.168.1.100", 
-            "Ubuntu Server 22.04 LTS",
-            128
-        );
+        entrada.close();
 
-        Servidor servidorBanco = new Servidor(
-            2, 
-            "PAT-2026-003", 
-            "HP ProLiant DL360", 
-            "Em Manutenção", 
-            "192.168.1.150", 
-            "Windows Server 2022",
-            64
-        );
-
-        //------------------------------------------------------------------
-        // Aula 8 - nova classe inserida no Main "AtivoDAO"
-        //--------------------------------------------------------------------
-         //AtivoDAO ativoDAO = new AtivoDAO();
-
-       // try {
-
-           // ativoDAO.salvar(servidorWeb);
-           // ativoDAO.salvar(servidorBanco);
-
-        //} catch (java.sql.SQLException erro) {
-
-            //System.out.println("Falha ao cadastrar equipamento: "
-                   // + erro.getMessage());
-        //}
-
-
-        // ----------------------------------------------------------------- 
-        // 3. RELATÓRIO POLIMÓRFICO DE CUSTOS (Usando Classe Abstrata) 
-        // ----------------------------------------------------------------- 
-        System.out.println("\n==================================================");
-        System.out.println(" RELATÓRIO DE CUSTOS DE MANUTENÇÃO (ABSTRAÇÃO) ");
-        System.out.println("==================================================");
-
-        // Correção da inicialização do array para evitar erros de compilação
-        AtivoTI[] inventario = new AtivoTI[2]; 
-        inventario[0] = servidorWeb; 
-        inventario[1] = servidorBanco;
-
-        double custoTotalEmpresa = 0.0;
-
-        for (AtivoTI ativo : inventario) {
-            if (ativo != null) {
-                // Impressão polimórfica (toString) 
-                System.out.println(ativo);
-
-                // Invocação do MÉTODOS ABSTRATO implementado obrigatoriamente na subclasse 
-                double custoAtivo = ativo.calcularCustoManutencaoMensal();
-                custoTotalEmpresa += custoAtivo;
-
-                System.out.printf(" └─> Custo Estimado de Manutenção: R$ %.2f%n%n", custoAtivo);
-            }
-        }
-
-        System.out.printf("CUSTO TOTAL DE MANUTENÇÃO MENSAL: R$ %.2f%n", custoTotalEmpresa);
-        System.out.println("--------------------------------------------------");
-
-        // ----------------------------------------------------------------- 
-        // 4. USO DE INTERFACES E CONTRATOS (INotificavel) 
-        // ----------------------------------------------------------------- 
-        System.out.println("\n==================================================");
-        System.out.println(" DISPARO DE ALERTAS (INTERFACE INotificavel) ");
-        System.out.println("==================================================");
-
-        // Instanciamos um ChamadoSuporte que se associa a um ativo 
-        ChamadoSuporte chamadoCritico = new ChamadoSuporte(
-            101, 
-            "Falha de Hardware no Servidor de Banco de Dados", 
-            "Alta",
-            servidorBanco
-        );
-
-        // Polimorfismo de Interface: Tratamos o objeto pela capacidade da Interface INotificavel 
-        INotificavel canalNotificacao = chamadoCritico;
-
-        // Disparamos a mensagem garantida pelo contrato da interface 
-        canalNotificacao.enviarAlerta("Superaquecimento detectado no processador do Servidor!");
-        System.out.println("================================================--");
+        System.out.println("\n====================================");
+        System.out.println("      FIM DA EXECUCAO");
+        System.out.println("====================================");
     }
 }
