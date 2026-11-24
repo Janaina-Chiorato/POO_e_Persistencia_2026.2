@@ -1,30 +1,54 @@
 
 package dao;
 
+import exceptions.FalhaConexaoBDException;
+import interfaces.IConexaoBD;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ConexaoBanco {
+public class ConexaoBanco implements IConexaoBD {
 
     private static final String URL =
-            "jdbc:sqlite:techlab_aula09.db";
+            "jdbc:sqlite:techlab_final.db";
 
-    public static Connection obterConexao() throws SQLException {
+    @Override
+    public Connection obterConexao()
+            throws FalhaConexaoBDException {
 
-        Connection conexao = DriverManager.getConnection(URL);
+        Connection conexao = null;
 
-        try (Statement comando = conexao.createStatement()) {
+        try {
 
-            comando.execute("PRAGMA foreign_keys = ON");
+            conexao = DriverManager.getConnection(URL);
+
+            // Ativa a integridade referencial
+            try (Statement stmt = conexao.createStatement()) {
+
+                stmt.execute("PRAGMA foreign_keys = ON");
+            }
+
+            return conexao;
 
         } catch (SQLException erro) {
 
-            conexao.close();
-            throw erro;
-        }
+            // Fecha a conexao em caso de falha
+            if (conexao != null) {
 
-        return conexao;
+                try {
+                    conexao.close();
+
+                } catch (SQLException erroFechamento) {
+
+                    erro.addSuppressed(erroFechamento);
+                }
+            }
+
+            throw new FalhaConexaoBDException(
+                    "Falha ao conectar ao banco de dados TechLab.",
+                    erro
+            );
+        }
     }
 }
