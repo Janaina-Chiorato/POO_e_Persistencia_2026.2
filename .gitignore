@@ -1,13 +1,25 @@
-# Ignorar arquivos compilados do Java
+# ==========================================
+# TECHLAB INVENTORY & SERVICE DESK
+# ==========================================
+
+# Arquivos compilados do Java
 *.class
 
-# Ignorar banco de dados local
-techlab.db
-
-# Ignorar arquivos de log
+# Arquivos de log
 *.log
-techlab_aula09.db
 
+# Bancos de dados locais
+techlab.db
+techlab_aula09.db
 techlab_final.db
 
+# Arquivos auxiliares do SQLite
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Arquivos CSV gerados pelo sistema
 dados/
+
+# Backups locais das aulas anteriores
+Main_Aula08_backup.txt
