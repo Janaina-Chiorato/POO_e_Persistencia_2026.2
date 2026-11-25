@@ -27,7 +27,14 @@ CREATE TABLE IF NOT EXISTS ativos (
     data_aquisicao TEXT NOT NULL,
 
     status TEXT NOT NULL
-        CHECK (length(trim(status)) > 0),
+        CHECK (
+            status IN (
+                'ATIVO',
+                'INATIVO',
+                'EM_MANUTENCAO',
+                'DESCARTADO'
+            )
+        ),
 
     valor REAL NOT NULL
         CHECK (valor >= 0),
@@ -163,6 +170,60 @@ CREATE TABLE IF NOT EXISTS chamados (
         ON DELETE RESTRICT
         ON UPDATE RESTRICT
 );
+
+-- ==========================================
+-- TRIGGER DE VALIDACAO NA INSERCAO DE ATIVOS
+-- ==========================================
+
+CREATE TRIGGER IF NOT EXISTS trg_ativos_status_insert
+
+BEFORE INSERT ON ativos
+
+FOR EACH ROW
+
+WHEN NEW.status IS NULL
+    OR NEW.status NOT IN (
+        'ATIVO',
+        'INATIVO',
+        'EM_MANUTENCAO',
+        'DESCARTADO'
+    )
+
+BEGIN
+
+    SELECT RAISE(
+        ABORT,
+        'Status invalido para o ativo.'
+    );
+
+END;
+
+-- ==========================================
+-- TRIGGER DE VALIDACAO NA ATUALIZACAO
+-- ==========================================
+
+CREATE TRIGGER IF NOT EXISTS trg_ativos_status_update
+
+BEFORE UPDATE OF status ON ativos
+
+FOR EACH ROW
+
+WHEN NEW.status IS NULL
+    OR NEW.status NOT IN (
+        'ATIVO',
+        'INATIVO',
+        'EM_MANUTENCAO',
+        'DESCARTADO'
+    )
+
+BEGIN
+
+    SELECT RAISE(
+        ABORT,
+        'Status invalido para o ativo.'
+    );
+
+END;
 
 -- ==========================================
 -- INDICES PARA OTIMIZACAO DAS CONSULTAS

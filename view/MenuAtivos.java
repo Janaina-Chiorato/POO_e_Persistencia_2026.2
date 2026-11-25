@@ -1,19 +1,16 @@
 package view;
 
-import java.util.Scanner;
-import java.util.List;
-import java.time.LocalDate;
-import java.sql.SQLException;
-
 import dao.AtivoDAO;
-
-import model.AtivoTI;
-import model.Servidor;
-import model.EstacaoTrabalho;
-import model.DispositivoRede;
-
 import exceptions.EquipamentoNaoEncontradoException;
 import exceptions.FalhaConexaoBDException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Scanner;
+import model.AtivoTI;
+import model.DispositivoRede;
+import model.EstacaoTrabalho;
+import model.Servidor;
 
 public class MenuAtivos {
 
@@ -163,7 +160,8 @@ public class MenuAtivos {
             "Data de aquisicao (AAAA-MM-DD): "
         );
 
-        String status = lerTexto("Status: ");
+        // Selecionar um status valido
+        String status = selecionarStatus();
 
         double valor = lerDouble("Valor do equipamento: R$ ");
 
@@ -352,9 +350,8 @@ public class MenuAtivos {
             lerData("Nova data de aquisicao (AAAA-MM-DD): ")
         );
 
-        ativo.setStatus(
-            lerTexto("Novo status: ")
-        );
+        // Selecionar o novo status
+        ativo.setStatus(selecionarStatus());
 
         ativo.setValor(
             lerDouble("Novo valor: R$ ")
@@ -481,6 +478,46 @@ public class MenuAtivos {
         }
 
         return ativo;
+    }
+
+    // ==========================================
+    // SELECIONAR STATUS DO EQUIPAMENTO
+    // ==========================================
+
+    private String selecionarStatus() {
+
+        while (true) {
+
+            System.out.println();
+            System.out.println("=== STATUS DO EQUIPAMENTO ===");
+            System.out.println("1. ATIVO");
+            System.out.println("2. INATIVO");
+            System.out.println("3. EM MANUTENCAO");
+            System.out.println("4. DESCARTADO");
+
+            int opcao = lerInteiro("Selecione o status: ");
+
+            switch (opcao) {
+
+                case 1:
+                    return "ATIVO";
+
+                case 2:
+                    return "INATIVO";
+
+                case 3:
+                    return "EM_MANUTENCAO";
+
+                case 4:
+                    return "DESCARTADO";
+
+                default:
+
+                    System.out.println(
+                        "Status invalido. Escolha uma opcao de 1 a 4."
+                    );
+            }
+        }
     }
 
     // ==========================================

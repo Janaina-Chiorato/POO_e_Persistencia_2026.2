@@ -1,7 +1,7 @@
-
 package model;
 
 import java.time.LocalDate;
+import java.util.Locale;
 
 public abstract class AtivoTI {
 
@@ -33,7 +33,10 @@ public abstract class AtivoTI {
         setValor(valor);
     }
 
-    // Getters
+    // ==========================================
+    // GETTERS
+    // ==========================================
+
     public int getId() {
         return id;
     }
@@ -62,9 +65,14 @@ public abstract class AtivoTI {
         return valor;
     }
 
-    // Setters com validacao
+    // ==========================================
+    // SETTERS COM VALIDACAO
+    // ==========================================
+
     public void setId(int id) {
+
         if (id <= 0) {
+
             throw new IllegalArgumentException(
                     "O ID deve ser maior que zero.");
         }
@@ -73,6 +81,7 @@ public abstract class AtivoTI {
     }
 
     public void setCodigoPatrimonio(String codigoPatrimonio) {
+
         if (codigoPatrimonio == null
                 || codigoPatrimonio.isBlank()) {
 
@@ -84,7 +93,9 @@ public abstract class AtivoTI {
     }
 
     public void setNome(String nome) {
+
         if (nome == null || nome.isBlank()) {
+
             throw new IllegalArgumentException(
                     "O nome do ativo e obrigatorio.");
         }
@@ -93,7 +104,9 @@ public abstract class AtivoTI {
     }
 
     public void setModelo(String modelo) {
+
         if (modelo == null || modelo.isBlank()) {
+
             throw new IllegalArgumentException(
                     "O modelo do equipamento e obrigatorio.");
         }
@@ -102,6 +115,7 @@ public abstract class AtivoTI {
     }
 
     public void setDataAquisicao(LocalDate dataAquisicao) {
+
         if (dataAquisicao == null
                 || dataAquisicao.isAfter(LocalDate.now())) {
 
@@ -112,17 +126,40 @@ public abstract class AtivoTI {
         this.dataAquisicao = dataAquisicao;
     }
 
+    // Validacao e padronizacao do status
     public void setStatus(String status) {
+
         if (status == null || status.isBlank()) {
+
             throw new IllegalArgumentException(
                     "O status do ativo e obrigatorio.");
         }
 
-        this.status = status.trim();
+        String statusNormalizado =
+                status.trim().toUpperCase(Locale.ROOT);
+
+        switch (statusNormalizado) {
+
+            case "ATIVO":
+            case "INATIVO":
+            case "EM_MANUTENCAO":
+            case "DESCARTADO":
+
+                this.status = statusNormalizado;
+                break;
+
+            default:
+
+                throw new IllegalArgumentException(
+                        "Status invalido. Utilize ATIVO, INATIVO, "
+                        + "EM_MANUTENCAO ou DESCARTADO.");
+        }
     }
 
     public void setValor(double valor) {
+
         if (!Double.isFinite(valor) || valor < 0) {
+
             throw new IllegalArgumentException(
                     "O valor deve ser finito e nao negativo.");
         }
@@ -130,12 +167,19 @@ public abstract class AtivoTI {
         this.valor = valor;
     }
 
-    // Metodo abstrato - Polimorfismo
+    // ==========================================
+    // METODO ABSTRATO - POLIMORFISMO
+    // ==========================================
+
     public abstract double calcularCustoManutencaoMensal();
 
-    // Representacao textual
+    // ==========================================
+    // REPRESENTACAO TEXTUAL
+    // ==========================================
+
     @Override
     public String toString() {
+
         return "AtivoTI {" +
                 "id=" + id +
                 ", patrimonio='" + codigoPatrimonio + '\'' +

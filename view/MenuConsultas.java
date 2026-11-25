@@ -171,9 +171,7 @@ public class MenuConsultas {
 
     private void filtrarPorStatus() throws SQLException {
 
-        System.out.println("\n=== FILTRO POR STATUS ===");
-
-        String status = lerTexto("Informe o status: ");
+        String status = selecionarStatus();
 
         GerenciadorColecao<AtivoDTO> colecao =
             carregarAtivos();
@@ -182,7 +180,48 @@ public class MenuConsultas {
             ativo -> ativo.getStatus().equalsIgnoreCase(status)
         );
 
+        System.out.println("\nStatus selecionado: " + status);
+
         exibirResultados(resultado);
+    }
+
+    // ==========================================
+    // SELECIONAR STATUS
+    // ==========================================
+
+    private String selecionarStatus() {
+
+        while (true) {
+
+            System.out.println("\n=== FILTRO POR STATUS ===");
+            System.out.println("1. ATIVO");
+            System.out.println("2. INATIVO");
+            System.out.println("3. EM MANUTENCAO");
+            System.out.println("4. DESCARTADO");
+
+            int opcao = lerInteiro("Selecione o status: ");
+
+            switch (opcao) {
+
+                case 1:
+                    return "ATIVO";
+
+                case 2:
+                    return "INATIVO";
+
+                case 3:
+                    return "EM_MANUTENCAO";
+
+                case 4:
+                    return "DESCARTADO";
+
+                default:
+
+                    System.out.println(
+                        "Status invalido. Escolha uma opcao de 1 a 4."
+                    );
+            }
+        }
     }
 
     // ==========================================
