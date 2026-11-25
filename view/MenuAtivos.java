@@ -137,7 +137,7 @@ public class MenuAtivos {
             return;
         }
 
-        int id = lerInteiro("ID: ");
+        int id = lerInteiroPositivo("ID: ");
 
         if (ativoDAO.buscarPorId(id) != null) {
 
@@ -160,7 +160,6 @@ public class MenuAtivos {
             "Data de aquisicao (AAAA-MM-DD): "
         );
 
-        // Selecionar um status valido
         String status = selecionarStatus();
 
         double valor = lerDouble("Valor do equipamento: R$ ");
@@ -173,7 +172,10 @@ public class MenuAtivos {
 
                 String ip = lerTexto("IP estatico: ");
                 String sistema = lerTexto("Sistema operacional: ");
-                int ramServidor = lerInteiro("Memoria RAM (GB): ");
+
+                int ramServidor = lerInteiroPositivo(
+                    "Memoria RAM (GB): "
+                );
 
                 ativo = new Servidor(
                     id,
@@ -193,7 +195,11 @@ public class MenuAtivos {
             case 2:
 
                 String processador = lerTexto("Processador: ");
-                int ramEstacao = lerInteiro("Memoria RAM (GB): ");
+
+                int ramEstacao = lerInteiroPositivo(
+                    "Memoria RAM (GB): "
+                );
+
                 String departamento = lerTexto("Departamento: ");
 
                 ativo = new EstacaoTrabalho(
@@ -219,7 +225,9 @@ public class MenuAtivos {
 
                 String enderecoIp = lerTexto("Endereco IP: ");
 
-                int portas = lerInteiro("Quantidade de portas: ");
+                int portas = lerInteiroPositivo(
+                    "Quantidade de portas: "
+                );
 
                 ativo = new DispositivoRede(
                     id,
@@ -280,7 +288,7 @@ public class MenuAtivos {
             throws SQLException,
                    EquipamentoNaoEncontradoException {
 
-        int id = lerInteiro("Informe o ID: ");
+        int id = lerInteiroPositivo("Informe o ID: ");
 
         AtivoTI ativo = localizarAtivo(id);
 
@@ -325,7 +333,7 @@ public class MenuAtivos {
 
         System.out.println("\n=== ATUALIZACAO DE ATIVO ===");
 
-        int id = lerInteiro("ID do equipamento: ");
+        int id = lerInteiroPositivo("ID do equipamento: ");
 
         AtivoTI ativo = localizarAtivo(id);
 
@@ -350,7 +358,6 @@ public class MenuAtivos {
             lerData("Nova data de aquisicao (AAAA-MM-DD): ")
         );
 
-        // Selecionar o novo status
         ativo.setStatus(selecionarStatus());
 
         ativo.setValor(
@@ -372,7 +379,7 @@ public class MenuAtivos {
             );
 
             servidor.setMemoriaRam(
-                lerInteiro("Nova memoria RAM (GB): ")
+                lerInteiroPositivo("Nova memoria RAM (GB): ")
             );
 
         } else if (ativo instanceof EstacaoTrabalho) {
@@ -385,7 +392,7 @@ public class MenuAtivos {
             );
 
             estacao.setMemoriaRam(
-                lerInteiro("Nova memoria RAM (GB): ")
+                lerInteiroPositivo("Nova memoria RAM (GB): ")
             );
 
             estacao.setDepartamento(
@@ -406,7 +413,7 @@ public class MenuAtivos {
             );
 
             dispositivo.setQuantidadePortas(
-                lerInteiro("Nova quantidade de portas: ")
+                lerInteiroPositivo("Nova quantidade de portas: ")
             );
         }
 
@@ -434,17 +441,13 @@ public class MenuAtivos {
 
         System.out.println("\n=== EXCLUSAO DE ATIVO ===");
 
-        int id = lerInteiro("ID do equipamento: ");
+        int id = lerInteiroPositivo("ID do equipamento: ");
 
         AtivoTI ativo = localizarAtivo(id);
 
         System.out.println(ativo);
 
-        String confirmacao = lerTexto(
-            "Confirma a exclusao? (S/N): "
-        );
-
-        if (!confirmacao.equalsIgnoreCase("S")) {
+        if (!confirmar("Confirma a exclusao? (S/N): ")) {
 
             System.out.println("Exclusao cancelada.");
             return;
@@ -562,6 +565,57 @@ public class MenuAtivos {
         }
     }
 
+    // ==========================================
+    // VALIDAR NUMEROS INTEIROS POSITIVOS
+    // ==========================================
+
+    private int lerInteiroPositivo(String mensagem) {
+
+        while (true) {
+
+            int valor = lerInteiro(mensagem);
+
+            if (valor > 0) {
+
+                return valor;
+            }
+
+            System.out.println(
+                "Informe um numero inteiro maior que zero."
+            );
+        }
+    }
+
+    // ==========================================
+    // VALIDAR CONFIRMACAO S/N
+    // ==========================================
+
+    private boolean confirmar(String mensagem) {
+
+        while (true) {
+
+            String resposta = lerTexto(mensagem);
+
+            if (resposta.equalsIgnoreCase("S")) {
+
+                return true;
+            }
+
+            if (resposta.equalsIgnoreCase("N")) {
+
+                return false;
+            }
+
+            System.out.println(
+                "Opcao invalida. Digite S ou N."
+            );
+        }
+    }
+
+    // ==========================================
+    // VALIDAR VALORES DECIMAIS
+    // ==========================================
+
     private double lerDouble(String mensagem) {
 
         while (true) {
@@ -589,6 +643,10 @@ public class MenuAtivos {
             }
         }
     }
+
+    // ==========================================
+    // VALIDAR DATAS
+    // ==========================================
 
     private LocalDate lerData(String mensagem) {
 
