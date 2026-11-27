@@ -546,11 +546,6 @@ POO_e_Persistencia_2026.2/
 │   ├── ChamadoDAO.java
 │   └── ConexaoBanco.java
 │
-├── docs/
-│   ├── arquitetura.md
-│   ├── modelagem-banco-dados.md
-│   └── modelagem-dominio.md
-│
 ├── dto/
 │   ├── AtivoDTO.java
 │   └── ChamadoDTO.java
@@ -933,20 +928,9 @@ automática no banco SQLite.
 
 ## 16. Documentação técnica
 
-Os diagramas principais estão incorporados neste README,
-nas seções correspondentes aos conceitos apresentados.
-
-A documentação complementar está organizada na pasta
-`docs/`, permitindo consultar os detalhes técnicos
-de cada componente.
-
-### Documentos complementares
-
-| Documento | Conteúdo | Acesso |
-|---|---|---|
-| Arquitetura do sistema | Camadas, componentes e fluxo de comunicação | [Visualizar documento](docs/arquitetura.md) |
-| Modelagem de domínio | Classes, atributos, interfaces e relacionamentos | [Visualizar documento](docs/modelagem-dominio.md) |
-| Modelagem do banco de dados | DER, tabelas, chaves e restrições | [Visualizar documento](docs/modelagem-banco-dados.md) |
+A documentação técnica do projeto está centralizada
+neste README, reunindo os conceitos, a arquitetura,
+a modelagem de domínio e a estrutura do banco de dados.
 
 ### Acesso rápido aos diagramas
 
